@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Upload CSV File</h1>
+<p>Required columns: <code>student_id, student_name, program, grade</code>. Optional: <code>year_level, subject, semester, school_year, attendance_rate</code>. Uploading replaces the existing data.</p>
+
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".csv" required>
+    <button type="submit">Upload</button>
+</form>
+
+{% endblock %}

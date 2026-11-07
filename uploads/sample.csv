@@ -1,0 +1,21 @@
+student_id,student_name,program,year_level,subject,semester,school_year,grade,attendance_rate
+2023-001,Juan Dela Cruz,BSIT,3,Advanced Database Systems,1st,2026-2027,92,95
+2023-002,Maria Santos,BSCS,2,System Integration Architecture,1st,2026-2027,88,91
+2023-003,Pedro Reyes,BSIT,4,Data Warehousing,1st,2026-2027,79,85
+2023-004,Ana Cruz,BSEd,3,Database Systems,1st,2026-2027,95,98
+2023-005,Lisa Ramos,BSCS,2,Python Programming,1st,2026-2027,84,88
+2023-006,Mark Villanueva,BSIT,1,Computer Programming,1st,2026-2027,75,80
+2023-007,Jane Flores,BSCS,4,System Integration Architecture,1st,2026-2027,90,94
+2023-008,Robert Garcia,BSEd,2,Database Systems,1st,2026-2027,82,86
+2023-009,Sarah Mendoza,BSIT,3,Advanced Database Systems,1st,2026-2027,91,97
+2023-010,Michael Torres,BSCS,1,Python Programming,1st,2026-2027,67,72
+2023-011,Princess Bautista,BSIT,2,Data Warehousing,1st,2026-2027,89,90
+2023-012,Joshua Navarro,BSEd,4,System Integration Architecture,1st,2026-2027,77,79
+2023-013,Patricia Gomez,BSIT,3,Advanced Database Systems,1st,2026-2027,94,96
+2023-014,Kevin Lopez,BSCS,2,Python Programming,1st,2026-2027,81,87
+2023-015,Angelica Cruz,BSEd,1,Computer Programming,1st,2026-2027,72,78
+2023-016,Ryan Mercado,BSIT,4,Data Warehousing,1st,2026-2027,85,89
+2023-017,Kimberly Perez,BSCS,3,System Integration Architecture,1st,2026-2027,93,95
+2023-018,John Paul Ramos,BSIT,2,Database Systems,1st,2026-2027,88,92
+2023-019,Michelle Tan,BSEd,4,Advanced Database Systems,1st,2026-2027,97,99
+2023-020,David Castillo,BSCS,1,Computer Programming,1st,2026-2027,70,74

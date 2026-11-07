@@ -1,0 +1,278 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- PAGE TITLE -->
+<div class="page-heading">
+    <div>
+        <span class="section-label">OVERVIEW</span>
+        <h1>Academic Dashboard</h1>
+        <p>Monitor student grades, attendance, and academic performance.</p>
+    </div>
+
+    <a href="{{ url_for('upload') }}" class="primary-button">
+        <span>＋</span> Upload Dataset
+    </a>
+</div>
+
+<!-- KPI CARDS -->
+<div class="cards">
+
+    <div class="card">
+        <div class="card-top">
+            <div class="kpi-icon blue">♙</div>
+            <span class="kpi-label">STUDENTS</span>
+        </div>
+        <h2>{{ total_students }}</h2>
+        <p>Total Students</p>
+    </div>
+
+    <div class="card">
+        <div class="card-top">
+            <div class="kpi-icon purple">▤</div>
+            <span class="kpi-label">RECORDS</span>
+        </div>
+        <h2>{{ total_records }}</h2>
+        <p>Academic Records</p>
+    </div>
+
+    <div class="card">
+        <div class="card-top">
+            <div class="kpi-icon green">↗</div>
+            <span class="kpi-label">AVERAGE</span>
+        </div>
+        <h2>{{ avg_grade if avg_grade is not none else 'N/A' }}</h2>
+        <p>Average Grade</p>
+    </div>
+
+    <div class="card">
+        <div class="card-top">
+            <div class="kpi-icon orange">★</div>
+            <span class="kpi-label">HIGHEST</span>
+        </div>
+        <h2>{{ highest_grade if highest_grade is not none else 'N/A' }}</h2>
+        <p>Highest Grade</p>
+    </div>
+
+    <div class="card">
+        <div class="card-top">
+            <div class="kpi-icon red">↓</div>
+            <span class="kpi-label">LOWEST</span>
+        </div>
+        <h2>{{ lowest_grade if lowest_grade is not none else 'N/A' }}</h2>
+        <p>Lowest Grade</p>
+    </div>
+
+    <div class="card">
+        <div class="card-top">
+            <div class="kpi-icon green">✓</div>
+            <span class="kpi-label">PASS RATE</span>
+        </div>
+        <h2>{{ pass_rate }}%</h2>
+        <p>Passing Grade (≥{{ passing_grade }})</p>
+    </div>
+
+    <div class="card">
+        <div class="card-top">
+            <div class="kpi-icon cyan">◷</div>
+            <span class="kpi-label">ATTENDANCE</span>
+        </div>
+        <h2>
+            {{ (avg_attendance ~ '%') if avg_attendance is not none else 'N/A' }}
+        </h2>
+        <p>Average Attendance</p>
+    </div>
+
+</div>
+
+{% if total_records == 0 %}
+
+    <div class="empty-state">
+        <div class="empty-icon">📊</div>
+        <h3>No Academic Data Available</h3>
+        <p>Upload a student CSV dataset to start analyzing academic performance.</p>
+        <a href="{{ url_for('upload') }}" class="primary-button">
+            Upload CSV Dataset
+        </a>
+    </div>
+
+{% else %}
+
+<!-- CHARTS SECTION -->
+<div class="section-header">
+    <div>
+        <span class="section-label">DATA VISUALIZATION</span>
+        <h2>Academic Performance Analytics</h2>
+        <p>Visual insights into student academic performance.</p>
+    </div>
+</div>
+
+<div class="chart-grid">
+
+    <div class="chart-container">
+        <div class="panel-heading">
+            <div>
+                <h3>Average Grade per Program</h3>
+                <p>Performance comparison by program</p>
+            </div>
+            <span class="panel-icon">▥</span>
+        </div>
+        <canvas id="programChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <div class="panel-heading">
+            <div>
+                <h3>Average Grade per Subject</h3>
+                <p>Subject performance overview</p>
+            </div>
+            <span class="panel-icon">▤</span>
+        </div>
+        <canvas id="subjectChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <div class="panel-heading">
+            <div>
+                <h3>Average Grade per Year Level</h3>
+                <p>Academic performance by year</p>
+            </div>
+            <span class="panel-icon">▥</span>
+        </div>
+        <canvas id="yearChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <div class="panel-heading">
+            <div>
+                <h3>Pass vs Fail</h3>
+                <p>Student passing performance</p>
+            </div>
+            <span class="panel-icon">◉</span>
+        </div>
+        <canvas id="passFailChart"></canvas>
+    </div>
+
+    <div class="chart-container full-width">
+        <div class="panel-heading">
+            <div>
+                <h3>Attendance vs Grade</h3>
+                <p>Relationship between attendance and academic grades</p>
+            </div>
+            <span class="panel-icon">⌁</span>
+        </div>
+        <canvas id="scatterChart"></canvas>
+    </div>
+
+</div>
+
+<!-- AT-RISK STUDENTS -->
+<div class="section-header table-section-heading">
+    <div>
+        <span class="section-label">STUDENT MONITORING</span>
+        <h2>At-Risk Student Records</h2>
+        <p>Students below the passing grade or minimum attendance.</p>
+    </div>
+    <span class="record-count">{{ at_risk|length }} Records</span>
+</div>
+
+<div class="table-container">
+
+    {% if at_risk %}
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    <th>Program</th>
+                    <th>Subject</th>
+                    <th>Grade</th>
+                    <th>Attendance</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for r in at_risk %}
+                <tr>
+                    <td>{{ r[0] }}</td>
+                    <td class="student-name">{{ r[1] }}</td>
+                    <td>{{ r[2] }}</td>
+                    <td>{{ r[3] or 'N/A' }}</td>
+                    <td>{{ r[4] }}</td>
+                    <td>{{ (r[5] ~ '%') if r[5] is not none else 'N/A' }}</td>
+                    <td>
+                        <span class="status-badge danger">At Risk</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+        <div class="table-empty">
+            <span>✓</span>
+            <p>No at-risk student records found.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+<!-- TOP STUDENTS -->
+<div class="section-header table-section-heading">
+    <div>
+        <span class="section-label">ACADEMIC ACHIEVEMENT</span>
+        <h2>Top 5 Student Grades</h2>
+        <p>Students with the highest recorded grades.</p>
+    </div>
+</div>
+
+<div class="table-container">
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    <th>Program</th>
+                    <th>Subject</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for r in top_students %}
+                <tr>
+                    <td>
+                        <span class="rank-badge">{{ loop.index }}</span>
+                    </td>
+                    <td>{{ r[0] }}</td>
+                    <td class="student-name">{{ r[1] }}</td>
+                    <td>{{ r[2] }}</td>
+                    <td>{{ r[3] or 'N/A' }}</td>
+                    <td>
+                        <span class="grade-badge">{{ r[4] }}</span>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">No student records available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
